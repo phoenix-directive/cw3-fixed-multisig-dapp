@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import WalletLoader from 'components/WalletLoader'
 import { getRecentMultisigs, type RecentMultisig } from 'util/recentMultisigs'
 import { shortenAddress } from 'util/conversion'
-import { Clock } from 'lucide-react'
 
 const Home = () => {
   const navigate = useNavigate()
