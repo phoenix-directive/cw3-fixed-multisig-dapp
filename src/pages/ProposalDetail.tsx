@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import LineAlert from 'components/LineAlert'
 import { VoteInfo, ProposalResponse } from 'types/cw3'
+import { getExplorerUrl } from 'util/conversion'
+
+const CHAIN_ID = import.meta.env.VITE_CHAIN_ID || 'phoenix-1'
 
 function VoteButtons({
   onVoteYes = () => {},
@@ -26,7 +29,7 @@ function VoteButtons({
         <LineAlert className="mt-2" variant={variant} msg={msg} />
         {status === 'open' && (
           <button
-            className="box-border px-4 py-2 rounded bg-gray-500 hover:bg-gray-600 text-white my-4"
+            className="px-6 py-3 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors font-semibold my-4"
             onClick={onBack}
           >
             {'< Proposals'}
@@ -39,22 +42,22 @@ function VoteButtons({
     return null
   }
   return (
-    <div className="flex justify-between content-center mt-2">
+    <div className="flex justify-between content-center mt-2 gap-2">
       <button
-        className="box-border px-4 py-2 rounded bg-gray-500 hover:bg-gray-600 text-white"
+        className="px-6 py-3 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors font-semibold"
         onClick={onBack}
       >
         {'< Proposals'}
       </button>
 
       <button
-        className="box-border px-4 py-2 rounded bg-orange-500 hover:bg-orange-600 text-white"
+        className="px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-semibold"
         onClick={onVoteYes}
       >
         Sign
       </button>
       <button
-        className="box-border px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white"
+        className="px-6 py-3 rounded-lg bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors font-semibold"
         onClick={onVoteNo}
       >
         Reject
@@ -174,19 +177,24 @@ const ProposalDetail = () => {
   return (
     <WalletLoader loading={loading}>
       <div className="flex flex-col w-full">
-        <div className="grid bg-base-100 place-items-center">
+        <div className="grid place-items-center">
           {!proposal ? (
-            <div className="text-center m-8">
+            <div className="text-center m-8 text-muted-foreground">
               No proposal with that ID found.
             </div>
           ) : (
-            <div className="container mx-auto max-w-lg text-left">
-              <h1 className="text-3xl font-bold mb-8">{proposal.title}</h1>
-              <p className="mb-8">{proposal.description}</p>
-              <div className="p-2 border border-black rounded mb-8">
-                <code className="break-all">
-                  {JSON.stringify(proposal.msgs)}
-                </code>
+            <div className="container mx-auto max-w-lg text-left px-4">
+              <h1 className="text-3xl font-bold mb-8 text-foreground">
+                {proposal.title}
+              </h1>
+              <p className="mb-8 text-foreground whitespace-pre-wrap">{proposal.description}</p>
+              <div className="mb-4">
+                <h2 className="text-xl font-semibold mb-2 text-foreground">Messages</h2>
+                <div className="p-4 border-2 border-border bg-card rounded-lg mb-8 overflow-x-auto">
+                  <pre className="text-sm text-foreground font-mono">
+                    <code>{JSON.stringify(proposal.msgs, null, 2)}</code>
+                  </pre>
+                </div>
               </div>
 
               <VoteButtons
@@ -207,17 +215,27 @@ const ProposalDetail = () => {
 
               {transactionHash.length > 0 && (
                 <div className="mt-8">
-                  <LineAlert
-                    variant="success"
-                    msg={`Success! Transaction Hash: ${transactionHash}`}
-                  />
+                  <div className="p-4 rounded-lg border-2 bg-green-100 dark:bg-green-900/20 border-green-500 text-green-800 dark:text-green-200">
+                    <div className="font-semibold mb-2">Success!</div>
+                    <div className="text-sm">
+                      Transaction:{' '}
+                      <a
+                        href={getExplorerUrl(CHAIN_ID, transactionHash)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline hover:text-green-600 dark:hover:text-green-300 break-all"
+                      >
+                        {transactionHash}
+                      </a>
+                    </div>
+                  </div>
                 </div>
               )}
 
               {proposal.status !== 'open' && (
-                <div className="flex justify-between content-center my-8">
+                <div className="flex justify-between content-center my-8 gap-2">
                   <button
-                    className="box-border px-4 py-2 rounded bg-gray-500 hover:bg-gray-600 text-white"
+                    className="px-6 py-3 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors font-semibold"
                     onClick={(e) => {
                       e.preventDefault()
                       navigate(`/${multisigAddress}`)
@@ -227,7 +245,7 @@ const ProposalDetail = () => {
                   </button>
                   {proposal.status === 'passed' && (
                     <button
-                      className="box-border px-4 py-2 rounded bg-orange-500 hover:bg-orange-600 text-white"
+                      className="px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-semibold"
                       onClick={handleExecute}
                     >
                       Execute
@@ -235,7 +253,7 @@ const ProposalDetail = () => {
                   )}
                   {proposal.status === 'rejected' && (
                     <button
-                      className="box-border px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white"
+                      className="px-6 py-3 rounded-lg bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors font-semibold"
                       onClick={handleClose}
                     >
                       Close

@@ -71,12 +71,19 @@ const icons = {
     </svg>
   ),
   success: (
-    <input
-      type="checkbox"
-      checked={true}
-      readOnly={true}
-      className="checkbox checkbox-accent"
-    />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      className="w-6 h-6 ml-2 stroke-current"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M5 13l4 4L19 7"
+      ></path>
+    </svg>
   ),
 }
 
@@ -89,26 +96,48 @@ export default function ProposalCard({
 }: ProposalCardProps) {
   const expiresAtDateTime = new Date(expires_at / 1000000).toLocaleString()
 
+  const statusColors = {
+    passed: 'border-yellow-500 bg-yellow-50 dark:bg-yellow-900/10',
+    rejected: 'border-red-500 bg-red-50 dark:bg-red-900/10',
+    executed: 'border-green-500 bg-green-50 dark:bg-green-900/10',
+    open: 'border-primary bg-primary/5',
+  }
+
+  const statusIconColors = {
+    passed: 'text-yellow-600 dark:text-yellow-400',
+    rejected: 'text-red-600 dark:text-red-400',
+    executed: 'text-green-600 dark:text-green-400',
+    open: 'text-primary',
+  }
+
   return (
     <Link to={`/${encodeURIComponent(multisigAddress)}/${id}`}>
       <div
-        className={`card shadow-lg mb-4`}
+        className={`rounded-xl shadow-lg hover:shadow-xl mb-4 border-2 transition-all ${statusColors[status as keyof typeof statusColors] || statusColors.open}`}
         title={`Expires at ${expiresAtDateTime}`}
       >
-        <div className="card-body py-4 px-8">
-          <div className="card-title flex flex-row justify-between m-0">
-            <div>{title}</div>
+        <div className="py-4 px-8">
+          <div className="flex flex-row justify-between items-center m-0">
+            <div className="text-lg font-semibold text-foreground">{title}</div>
             {status === 'passed' && (
-              <div className="text-2xl text-warning">{icons.warning}</div>
+              <div className={`text-2xl ${statusIconColors.passed}`}>
+                {icons.warning}
+              </div>
             )}
             {status === 'rejected' && (
-              <div className="text-2xl text-error">{icons.error}</div>
+              <div className={`text-2xl ${statusIconColors.rejected}`}>
+                {icons.error}
+              </div>
             )}
             {status === 'executed' && (
-              <div className="text-2xl text-success">&#x2713;</div>
+              <div className={`text-2xl ${statusIconColors.executed}`}>
+                &#x2713;
+              </div>
             )}
             {status === 'open' && (
-              <div className="text-2xl text-info">{icons.bell}</div>
+              <div className={`text-2xl ${statusIconColors.open}`}>
+                {icons.bell}
+              </div>
             )}
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { connectKeplr } from 'services/keplr'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { GasPrice } from '@cosmjs/stargate'
@@ -21,6 +21,14 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     useState<SigningCosmWasmClient | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
+
+  // Auto-reconnect on mount if wallet was previously connected
+  useEffect(() => {
+    const wasConnected = localStorage.getItem('walletConnected')
+    if (wasConnected === 'true') {
+      connectWallet()
+    }
+  }, [])
 
   const connectWallet = async () => {
     setLoading(true)
@@ -58,12 +66,17 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       // get user address
       const [{ address }] = await offlineSigner.getAccounts()
       setWalletAddress(address)
+      
+      // Remember wallet connection
+      localStorage.setItem('walletConnected', 'true')
 
       setLoading(false)
     } catch (error) {
       console.error('Wallet connection error:', error)
       setError(error as Error)
       setLoading(false)
+      // Clear connection flag on error
+      localStorage.removeItem('walletConnected')
     }
   }
 
@@ -74,6 +87,8 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     setWalletAddress('')
     setSigningClient(null)
     setLoading(false)
+    // Clear wallet connection from localStorage
+    localStorage.removeItem('walletConnected')
   }
 
   return {

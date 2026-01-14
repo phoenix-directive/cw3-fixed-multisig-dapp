@@ -15,7 +15,7 @@ function AddressRow({ idx, readOnly }: { idx: number; readOnly: boolean }) {
     <tr key={idx}>
       <td className="pr-2 pb-2">
         <input
-          className="block box-border m-0 w-full rounded input input-bordered focus:input-primary font-mono"
+          className="block box-border m-0 w-full rounded-lg px-4 py-2 bg-card border-2 border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 font-mono transition-all"
           type="text"
           name={`address_${idx}`}
           placeholder="wallet address..."
@@ -26,7 +26,7 @@ function AddressRow({ idx, readOnly }: { idx: number; readOnly: boolean }) {
       <td className="pb-2">
         <input
           type="number"
-          className="block box-border m-0 w-full rounded input input-bordered focus:input-primary font-mono"
+          className="block box-border m-0 w-full rounded-lg px-4 py-2 bg-card border-2 border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 font-mono transition-all"
           name={`weight_${idx}`}
           defaultValue="1"
           min={1}
@@ -149,7 +149,7 @@ const CreateMultisig = () => {
               <tr>
                 <td colSpan={2} className="text-right">
                   <button
-                    className="btn btn-outline btn-primary btn-md text-md rounded-full"
+                    className="px-6 py-2 border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground rounded-full transition-colors font-medium"
                     onClick={(e) => {
                       e.preventDefault()
                       setCount(count + 1)
@@ -165,18 +165,18 @@ const CreateMultisig = () => {
           <table className="w-full my-4">
             <thead>
               <tr>
-                <th className="text-left">Threshold</th>
-                <th className="text-left box-border px-2 text-sm">
+                <th className="text-left pb-2 text-foreground">Threshold</th>
+                <th className="text-left box-border px-2 text-sm pb-2 text-foreground">
                   Max Voting Period (seconds)
                 </th>
-                <th className="text-left">Label</th>
+                <th className="text-left pb-2 text-foreground">Label</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>
                   <input
-                    className="block box-border m-0 w-full rounded input input-bordered focus:input-primary"
+                    className="block box-border m-0 w-full rounded-lg px-4 py-2 bg-card border-2 border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                     name="threshold"
                     type="number"
                     defaultValue={count}
@@ -187,7 +187,7 @@ const CreateMultisig = () => {
                 </td>
                 <td className="box-border px-2">
                   <input
-                    className="block box-border m-0 w-full rounded input input-bordered focus:input-primary"
+                    className="block box-border m-0 w-full rounded-lg px-4 py-2 bg-card border-2 border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                     name="duration"
                     type="number"
                     placeholder="duration in seconds"
@@ -199,7 +199,7 @@ const CreateMultisig = () => {
                 </td>
                 <td>
                   <input
-                    className="block box-border m-0 w-full rounded  input input-bordered focus:input-primary"
+                    className="block box-border m-0 w-full rounded-lg px-4 py-2 bg-card border-2 border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                     name="label"
                     type="text"
                     placeholder="My multisig name"
@@ -211,14 +211,14 @@ const CreateMultisig = () => {
           </table>
           {!complete && (
             <button
-              className={`btn btn-primary btn-lg font-semibold hover:text-base-100 text-2xl rounded-full w-full ${
-                loading ? 'loading' : ''
+              className={`px-8 py-4 bg-primary text-primary-foreground font-semibold hover:bg-primary/90 text-2xl rounded-full w-full shadow-lg transition-all ${
+                loading ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               style={{ cursor: loading ? 'not-allowed' : 'pointer' }}
               type="submit"
               disabled={loading}
             >
-              Create Multisig
+              {loading ? 'Creating...' : 'Create Multisig'}
             </button>
           )}
         </form>
@@ -229,7 +229,7 @@ const CreateMultisig = () => {
           <div className="text-right">
             <LineAlert variant="success" msg={`Success!`} />
             <button
-              className="mt-4 box-border px-4 py-2 btn btn-primary"
+              className="mt-4 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-semibold"
               onClick={(e) => {
                 e.preventDefault()
                 navigate(`/${encodeURIComponent(contractAddress)}`)

@@ -4,6 +4,10 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import ProposalCard from 'components/ProposalCard'
 import { ProposalListResponse, ProposalResponse, Timestamp } from 'types/cw3'
+import { getAddressExplorerUrl, shortenAddress } from 'util/conversion'
+import { ExternalLink } from 'lucide-react'
+
+const CHAIN_ID = import.meta.env.VITE_CHAIN_ID || 'phoenix-1'
 
 // TODO: review union Expiration from types/cw3
 type Expiration = {
@@ -53,10 +57,26 @@ const MultisigDetail = () => {
   return (
     <WalletLoader loading={reversedProposals.length === 0 && loading}>
       <div className="flex flex-col w-96 lg:w-6/12 max-w-full px-2 py-4">
+        {multisigAddress && (
+          <div className="mb-4 flex items-center gap-2 text-muted-foreground text-sm">
+            <span className="font-mono">{shortenAddress(multisigAddress)}</span>
+            <a
+              href={getAddressExplorerUrl(CHAIN_ID, multisigAddress)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:text-primary/80 transition-colors"
+              title="View on Explorer"
+            >
+              <ExternalLink className="h-4 w-4" />
+            </a>
+          </div>
+        )}
         <div className="flex flex-row justify-between items-center mb-4">
-          <h1 className="text-lg font-bold sm:text-3xl">Proposals</h1>
+          <h1 className="text-lg font-bold sm:text-3xl text-foreground">
+            Proposals
+          </h1>
           <button
-            className="btn btn-primary btn-sm text-lg"
+            className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-semibold text-lg"
             onClick={() =>
               navigate(`/${encodeURIComponent(multisigAddress!)}/create`)
             }
@@ -67,7 +87,7 @@ const MultisigDetail = () => {
       </div>
       <div className="w-96 lg:w-6/12 max-w-full">
         {reversedProposals.length === 0 && (
-          <div className="text-center">
+          <div className="text-center text-muted-foreground">
             No proposals found, please create a proposal.
           </div>
         )}
@@ -88,7 +108,7 @@ const MultisigDetail = () => {
         })}
         {!hideLoadMore && (
           <button
-            className="btn btn-primary btn-outline text-lg w-full mt-2"
+            className="px-6 py-3 border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground text-lg w-full mt-2 rounded-lg transition-colors font-semibold"
             onClick={() => {
               const proposal = reversedProposals[reversedProposals.length - 1]
               setStartBefore(proposal.id)

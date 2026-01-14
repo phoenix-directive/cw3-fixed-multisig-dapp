@@ -17,8 +17,8 @@ function Nav() {
   const PUBLIC_SITE_TITLE = import.meta.env.VITE_SITE_TITLE || 'CW3 Multisig'
 
   return (
-    <div className="border-b w-screen px-2 md:px-16">
-      <nav className="flex flex-wrap text-center md:text-left md:flex flex-row w-full justify-between items-center py-4 ">
+    <div className="border-b border-border w-screen px-2 md:px-16 bg-card">
+      <nav className="flex flex-wrap text-center md:text-left md:flex flex-row w-full justify-between items-center py-4 gap-4">
         <div className="flex items-center">
           <Link to="/">
             {PUBLIC_SITE_ICON_URL.length > 0 ? (
@@ -34,7 +34,7 @@ function Nav() {
           </Link>
           <Link
             to="/"
-            className="ml-1 md:ml-2 link link-hover font-semibold text-xl md:text-2xl align-top"
+            className="ml-1 md:ml-2 hover:text-primary transition-colors font-semibold text-xl md:text-2xl align-top"
           >
             {PUBLIC_SITE_TITLE}
           </Link>
@@ -43,7 +43,7 @@ function Nav() {
         <ThemeToggle />
         <div className="flex flex-grow md:flex-grow-0 max-w-full">
           <button
-            className={`block btn btn-outline btn-primary w-full max-w-full truncate ${
+            className={`px-6 py-2 rounded-lg border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors font-medium w-full max-w-full truncate ${
               walletAddress.length > 0 ? 'lowercase' : ''
             }`}
             onClick={handleConnect}

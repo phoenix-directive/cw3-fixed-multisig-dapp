@@ -1,39 +1,47 @@
-import { themeChange } from 'theme-change'
 import { useEffect, useState } from 'react'
-import daisyuiThemes from 'styles/daisyui-themes.json'
-
-const themes = Object.keys(daisyuiThemes) || ['']
-export const defaultTheme = themes[0] // phoenixDark
+import { Sun, Moon } from 'lucide-react'
 
 function ThemeToggle() {
-  const [theme, setTheme] = useState(defaultTheme)
+  const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {
-    themeChange(false)
-    const currentTheme = document.documentElement.getAttribute('data-theme')
-    if (!currentTheme) {
-      document.documentElement.setAttribute('data-theme', defaultTheme)
-    }
-    setTheme(currentTheme || defaultTheme)
+    // Check if dark mode is already set
+    const isDarkMode = document.documentElement.classList.contains('dark')
+    setIsDark(isDarkMode)
   }, [])
 
   const handleToggle = () => {
-    const newTheme = theme === themes[0] ? themes[1] : themes[0]
-    document.documentElement.setAttribute('data-theme', newTheme)
-    setTheme(newTheme)
+    const newIsDark = !isDark
+    setIsDark(newIsDark)
+
+    if (newIsDark) {
+      document.documentElement.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
+    }
   }
 
   return (
-    <div className="form-control lg:mr-4 md:ml-auto">
-      <label className="cursor-pointer label">
-        <span className="label-text">🌚&nbsp;</span>
-        <input
-          type="checkbox"
-          className="toggle toggle-secondary mx-1"
-          checked={theme === themes[1]}
-          onChange={handleToggle}
-        />
-        <span className="label-text">🌞</span>
+    <div className="flex items-center lg:mr-4 md:ml-auto">
+      <label className="flex items-center cursor-pointer">
+        <Sun className="mr-2 h-5 w-5" />
+        <div className="relative">
+          <input
+            type="checkbox"
+            className="sr-only"
+            checked={isDark}
+            onChange={handleToggle}
+          />
+          <div
+            className={`block w-14 h-8 rounded-full transition ${isDark ? 'bg-primary' : 'bg-muted'}`}
+          ></div>
+          <div
+            className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${isDark ? 'transform translate-x-6' : ''}`}
+          ></div>
+        </div>
+        <Moon className="ml-2 h-5 w-5" />
       </label>
     </div>
   )

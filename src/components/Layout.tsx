@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   }, [])
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-base-100 text-base-content">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground">
       <Nav />
       <main className="flex flex-col items-center justify-center w-full flex-1 p-2 md:px-20 text-center">
         {children}

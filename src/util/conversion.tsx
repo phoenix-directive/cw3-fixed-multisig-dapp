@@ -36,3 +36,34 @@ export const zeroStakingCoin = {
   amount: '0',
   denom: import.meta.env.VITE_STAKING_DENOM || 'ujuno',
 }
+
+export const getExplorerUrl = (chainId: string, txHash: string): string => {
+  // Map chain IDs to their explorer URLs
+  const explorerMap: Record<string, string> = {
+    'phoenix-1': 'https://chainsco.pe/terra2/tx/',
+    'pisco-1': 'https://chainsco.pe/terra2-testnet/tx/',
+    'juno-1': 'https://www.mintscan.io/juno/txs/',
+    'uni-6': 'https://www.mintscan.io/juno-testnet/txs/',
+  }
+  
+  const baseUrl = explorerMap[chainId] || 'https://chainsco.pe/terra2/tx/'
+  return `${baseUrl}${txHash}`
+}
+
+export const getAddressExplorerUrl = (chainId: string, address: string): string => {
+  // Map chain IDs to their explorer URLs for addresses
+  const explorerMap: Record<string, string> = {
+    'phoenix-1': 'https://chainsco.pe/terra2/address/',
+    'pisco-1': 'https://chainsco.pe/terra2-testnet/address/',
+    'juno-1': 'https://www.mintscan.io/juno/address/',
+    'uni-6': 'https://www.mintscan.io/juno-testnet/address/',
+  }
+  
+  const baseUrl = explorerMap[chainId] || 'https://chainsco.pe/terra2/address/'
+  return `${baseUrl}${address}`
+}
+
+export const shortenAddress = (address: string): string => {
+  if (!address || address.length < 13) return address
+  return `${address.slice(0, 6)}...${address.slice(-6)}`
+}

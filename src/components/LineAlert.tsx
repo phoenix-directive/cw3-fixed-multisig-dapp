@@ -40,16 +40,22 @@ function LineAlert({
   msg: string
   className?: string
 }) {
-  const alertClassName = [
-    'alert',
-    variant === 'success' ? 'alert-success' : 'alert-error',
-    className,
-  ].join(' ')
+  const bgColor =
+    variant === 'success'
+      ? 'bg-green-100 dark:bg-green-900/20 border-green-500'
+      : 'bg-red-100 dark:bg-red-900/20 border-red-500'
+  const textColor =
+    variant === 'success'
+      ? 'text-green-800 dark:text-green-200'
+      : 'text-red-800 dark:text-red-200'
+
   return (
-    <div className={alertClassName}>
-      <div className="flex-1 items-center">
+    <div
+      className={`flex items-center p-4 rounded-lg border-2 ${bgColor} ${textColor} ${className}`}
+    >
+      <div className="flex items-center flex-1">
         {icons[variant]}
-        <label className="flex-grow break-all text-center">{msg}</label>
+        <label className="flex-grow break-all text-center ml-2">{msg}</label>
       </div>
     </div>
   )

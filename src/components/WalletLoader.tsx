@@ -26,15 +26,15 @@ function WalletLoader({
 
   if (walletAddress === '') {
     return (
-      <div className="max-w-full flex flex-col items-center justify-center">
-        <h1 className="text-6xl font-bold">
+      <div className="max-w-full flex flex-col items-center justify-center px-4">
+        <h1 className="text-6xl font-bold text-foreground">
           Welcome to {import.meta.env.VITE_SITE_TITLE || 'CW3 Multisig'}!
         </h1>
 
-        <p className="mt-3 text-2xl">
+        <p className="mt-3 text-2xl text-muted-foreground">
           Get started by installing{' '}
           <a
-            className="pl-1 link link-primary link-hover"
+            className="pl-1 text-primary hover:underline"
             href="https://keplr.app/"
           >
             Keplr wallet
@@ -43,11 +43,13 @@ function WalletLoader({
 
         <div className="flex flex-wrap items-center justify-around md:max-w-4xl mt-6 sm:w-full">
           <button
-            className="p-6 mt-6 text-left border border-secondary hover:border-primary w-96 rounded-xl hover:text-primary focus:text-primary-focus"
+            className="p-6 mt-6 text-left border-2 border-border bg-card hover:border-primary w-96 rounded-xl hover:shadow-lg transition-all group"
             onClick={connectWallet}
           >
-            <h3 className="text-2xl font-bold">Connect your wallet &rarr;</h3>
-            <p className="mt-4 text-xl">
+            <h3 className="text-2xl font-bold group-hover:text-primary transition-colors">
+              Connect your wallet &rarr;
+            </h3>
+            <p className="mt-4 text-xl text-muted-foreground">
               Create and manage your multsig by connecting your Keplr wallet.
             </p>
           </button>
