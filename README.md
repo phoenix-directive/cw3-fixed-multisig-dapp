@@ -67,14 +67,42 @@ npm run preview
 
 Since this is now a static site (no server needed), you can deploy the `dist/` folder to any static hosting service:
 
-- **GitHub Pages** - Free static hosting
-- **Vercel** - Free tier available
-- **Netlify** - Free tier available
-- **Cloudflare Pages** - Free tier available
-- **AWS S3 + CloudFront**
-- **Any web server** - Just upload the dist folder
+### Environment Variables for Production
 
-Simply upload the contents of the `dist/` directory after running `npm run build`.
+**IMPORTANT**: When deploying, you MUST configure your environment variables in your hosting platform. The app will not work without them.
+
+Required environment variables:
+- `VITE_CHAIN_ID` - The chain ID (e.g., `lucina`, `juno-1`)
+- `VITE_CHAIN_NAME` - Display name of the chain (e.g., `Juno`)
+- `VITE_CHAIN_BECH32_PREFIX` - Address prefix (e.g., `juno`)
+- `VITE_CHAIN_RPC_ENDPOINT` - RPC endpoint URL
+- `VITE_CHAIN_REST_ENDPOINT` - REST API endpoint URL
+- `VITE_STAKING_DENOM` - Staking denomination (e.g., `ujuno`)
+- `VITE_SITE_TITLE` - Site title
+- `VITE_SITE_ICON_URL` - Site icon URL
+- `VITE_MULTISIG_CODE_ID` - Multisig contract code ID
+
+### Cloudflare Pages Deployment
+
+If deploying to Cloudflare Pages:
+
+1. Set up your environment variables in the Cloudflare dashboard:
+   - Go to Workers & Pages → Your project → Settings → Environment variables
+   - Add all the required `VITE_*` variables listed above
+   - **Important**: Set them for the Production environment
+
+2. Build command: `npm run build`
+3. Output directory: `dist`
+4. Root directory: `/`
+
+### Other Hosting Platforms
+
+- **GitHub Pages** - Use GitHub Actions and set repository secrets
+- **Vercel** - Add environment variables in Project Settings → Environment Variables
+- **Netlify** - Add environment variables in Site settings → Build & deploy → Environment
+- **AWS S3 + CloudFront** - Environment variables must be set at build time
+
+Simply upload the contents of the `dist/` directory after running `npm run build` with environment variables configured.
 
 ## Requirements
 

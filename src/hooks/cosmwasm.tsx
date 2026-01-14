@@ -12,7 +12,7 @@ export interface ISigningCosmWasmClientContext {
   disconnect: Function
 }
 
-const PUBLIC_RPC_ENDPOINT = import.meta.env.VITE_CHAIN_RPC_ENDPOINT || ''
+const PUBLIC_RPC_ENDPOINT = import.meta.env.VITE_CHAIN_RPC_ENDPOINT
 const PUBLIC_CHAIN_ID = import.meta.env.VITE_CHAIN_ID
 
 export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
@@ -26,6 +26,14 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     setLoading(true)
 
     try {
+      // Validate environment variables
+      if (!PUBLIC_RPC_ENDPOINT) {
+        throw new Error('VITE_CHAIN_RPC_ENDPOINT is not configured')
+      }
+      if (!PUBLIC_CHAIN_ID) {
+        throw new Error('VITE_CHAIN_ID is not configured')
+      }
+
       await connectKeplr()
 
       // enable website to access kepler
@@ -53,7 +61,9 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
 
       setLoading(false)
     } catch (error) {
+      console.error('Wallet connection error:', error)
       setError(error as Error)
+      setLoading(false)
     }
   }
 
