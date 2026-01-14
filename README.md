@@ -72,6 +72,7 @@ Since this is now a static site (no server needed), you can deploy the `dist/` f
 **IMPORTANT**: When deploying, you MUST configure your environment variables in your hosting platform. The app will not work without them.
 
 Required environment variables:
+
 - `VITE_CHAIN_ID` - The chain ID (e.g., `lucina`, `juno-1`)
 - `VITE_CHAIN_NAME` - Display name of the chain (e.g., `Juno`)
 - `VITE_CHAIN_BECH32_PREFIX` - Address prefix (e.g., `juno`)

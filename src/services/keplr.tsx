@@ -25,15 +25,21 @@ export const connectKeplr = async () => {
         throw new Error('VITE_CHAIN_NAME environment variable is not set')
       }
       if (!import.meta.env.VITE_CHAIN_RPC_ENDPOINT) {
-        throw new Error('VITE_CHAIN_RPC_ENDPOINT environment variable is not set')
+        throw new Error(
+          'VITE_CHAIN_RPC_ENDPOINT environment variable is not set'
+        )
       }
       if (!import.meta.env.VITE_CHAIN_REST_ENDPOINT) {
-        throw new Error('VITE_CHAIN_REST_ENDPOINT environment variable is not set')
+        throw new Error(
+          'VITE_CHAIN_REST_ENDPOINT environment variable is not set'
+        )
       }
       if (!import.meta.env.VITE_CHAIN_BECH32_PREFIX) {
-        throw new Error('VITE_CHAIN_BECH32_PREFIX environment variable is not set')
+        throw new Error(
+          'VITE_CHAIN_BECH32_PREFIX environment variable is not set'
+        )
       }
-      
+
       const stakingDenom = convertFromMicroDenom(
         import.meta.env.VITE_STAKING_DENOM || 'ujuno'
       )
