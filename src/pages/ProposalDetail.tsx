@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import LineAlert from 'components/LineAlert'
 import { VoteInfo, ProposalResponse } from 'types/cw3'
 import { getExplorerUrl } from 'util/conversion'
+import { ChevronLeft } from 'lucide-react'
 
 const CHAIN_ID = import.meta.env.VITE_CHAIN_ID || 'phoenix-1'
 
@@ -29,10 +30,11 @@ function VoteButtons({
         <LineAlert className="mt-2" variant={variant} msg={msg} />
         {status === 'open' && (
           <button
-            className="px-6 py-3 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors font-semibold my-4"
+            className="px-6 py-3 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors font-semibold my-4 flex items-center justify-center gap-1"
             onClick={onBack}
           >
-            {'< Proposals'}
+            <ChevronLeft className="h-4 w-4" />
+            Proposals
           </button>
         )}
       </>
@@ -44,10 +46,11 @@ function VoteButtons({
   return (
     <div className="flex justify-between content-center mt-2 gap-2">
       <button
-        className="px-6 py-3 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors font-semibold"
+        className="px-6 py-3 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors font-semibold flex items-center justify-center gap-1"
         onClick={onBack}
       >
-        {'< Proposals'}
+        <ChevronLeft className="h-4 w-4" />
+        Proposals
       </button>
 
       <button
@@ -176,23 +179,47 @@ const ProposalDetail = () => {
 
   return (
     <WalletLoader loading={loading}>
-      <div className="flex flex-col w-full">
-        <div className="grid place-items-center">
+      <div className="flex justify-center w-full text-left">
+        <div className="flex flex-col w-full max-w-3xl px-2 py-4">
           {!proposal ? (
             <div className="text-center m-8 text-muted-foreground">
               No proposal with that ID found.
             </div>
           ) : (
-            <div className="container mx-auto max-w-lg text-left px-4">
-              <h1 className="text-3xl font-bold mb-8 text-foreground">
+            <>
+              <h1 className="text-2xl font-bold mb-6 text-foreground">
                 {proposal.title}
               </h1>
-              <p className="mb-8 text-foreground whitespace-pre-wrap">{proposal.description}</p>
+              <p className="mb-8 text-foreground whitespace-pre-wrap">
+                {proposal.description}
+              </p>
               <div className="mb-4">
-                <h2 className="text-xl font-semibold mb-2 text-foreground">Messages</h2>
-                <div className="p-4 border-2 border-border bg-card rounded-lg mb-8 overflow-x-auto">
-                  <pre className="text-sm text-foreground font-mono">
-                    <code>{JSON.stringify(proposal.msgs, null, 2)}</code>
+                <h2 className="text-xl font-semibold mb-2 text-foreground">
+                  Messages
+                </h2>
+                <div className="p-4 border border-border bg-card rounded-lg mb-8 overflow-x-auto">
+                  <pre className="text-sm font-mono">
+                    <code
+                      dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(proposal.msgs, null, 1)
+                          .replace(
+                            /"([^"]+)":/g,
+                            '<span class="text-blue-600 dark:text-blue-400">"$1"</span>:'
+                          )
+                          .replace(
+                            /: "([^"]*)"/g,
+                            ': <span class="text-green-600 dark:text-green-400">"$1"</span>'
+                          )
+                          .replace(
+                            /: (true|false|null)/g,
+                            ': <span class="text-purple-600 dark:text-purple-400">$1</span>'
+                          )
+                          .replace(
+                            /: (\d+)/g,
+                            ': <span class="text-orange-600 dark:text-orange-400">$1</span>'
+                          ),
+                      }}
+                    ></code>
                   </pre>
                 </div>
               </div>
@@ -215,7 +242,7 @@ const ProposalDetail = () => {
 
               {transactionHash.length > 0 && (
                 <div className="mt-8">
-                  <div className="p-4 rounded-lg border-2 bg-green-100 dark:bg-green-900/20 border-green-500 text-green-800 dark:text-green-200">
+                  <div className="p-4 rounded-lg border border-green-500/30 bg-green-500/5 text-green-700 dark:text-green-300">
                     <div className="font-semibold mb-2">Success!</div>
                     <div className="text-sm">
                       Transaction:{' '}
@@ -235,13 +262,14 @@ const ProposalDetail = () => {
               {proposal.status !== 'open' && (
                 <div className="flex justify-between content-center my-8 gap-2">
                   <button
-                    className="px-6 py-3 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors font-semibold"
+                    className="px-6 py-3 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors font-semibold flex items-center justify-center gap-1"
                     onClick={(e) => {
                       e.preventDefault()
                       navigate(`/${multisigAddress}`)
                     }}
                   >
-                    {'< Proposals'}
+                    <ChevronLeft className="h-4 w-4" />
+                    Proposals
                   </button>
                   {proposal.status === 'passed' && (
                     <button
@@ -261,7 +289,7 @@ const ProposalDetail = () => {
                   )}
                 </div>
               )}
-            </div>
+            </>
           )}
         </div>
       </div>

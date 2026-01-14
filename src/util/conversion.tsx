@@ -45,12 +45,15 @@ export const getExplorerUrl = (chainId: string, txHash: string): string => {
     'juno-1': 'https://www.mintscan.io/juno/txs/',
     'uni-6': 'https://www.mintscan.io/juno-testnet/txs/',
   }
-  
+
   const baseUrl = explorerMap[chainId] || 'https://chainsco.pe/terra2/tx/'
   return `${baseUrl}${txHash}`
 }
 
-export const getAddressExplorerUrl = (chainId: string, address: string): string => {
+export const getAddressExplorerUrl = (
+  chainId: string,
+  address: string
+): string => {
   // Map chain IDs to their explorer URLs for addresses
   const explorerMap: Record<string, string> = {
     'phoenix-1': 'https://chainsco.pe/terra2/address/',
@@ -58,7 +61,7 @@ export const getAddressExplorerUrl = (chainId: string, address: string): string 
     'juno-1': 'https://www.mintscan.io/juno/address/',
     'uni-6': 'https://www.mintscan.io/juno-testnet/address/',
   }
-  
+
   const baseUrl = explorerMap[chainId] || 'https://chainsco.pe/terra2/address/'
   return `${baseUrl}${address}`
 }

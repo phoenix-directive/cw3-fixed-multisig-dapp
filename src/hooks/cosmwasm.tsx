@@ -66,7 +66,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       // get user address
       const [{ address }] = await offlineSigner.getAccounts()
       setWalletAddress(address)
-      
+
       // Remember wallet connection
       localStorage.setItem('walletConnected', 'true')
 

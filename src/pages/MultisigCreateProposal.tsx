@@ -189,7 +189,7 @@ const MultisigCreateProposal = () => {
 
             {proposalID.length > 0 && (
               <div className="mt-8">
-                <div className="p-4 rounded-lg border-2 bg-green-100 dark:bg-green-900/20 border-green-500 text-green-800 dark:text-green-200">
+                <div className="p-4 rounded-lg border border-green-500/30 bg-green-500/5 text-green-700 dark:text-green-300">
                   <div className="font-semibold mb-2">Success!</div>
                   <div className="text-sm">
                     Transaction:{' '}

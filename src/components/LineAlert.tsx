@@ -4,7 +4,7 @@ const icons = {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      className="flex-shrink-0 w-6 h-6 mx-2 stroke-current flex-shrink-0"
+      className="flex-shrink-0 w-5 h-5 mx-2 stroke-current"
     >
       <path
         strokeLinecap="round"
@@ -19,7 +19,7 @@ const icons = {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      className="w-6 h-6 mx-2 stroke-current flex-shrink-0"
+      className="w-5 h-5 mx-2 stroke-current flex-shrink-0"
     >
       <path
         strokeLinecap="round"
@@ -42,20 +42,22 @@ function LineAlert({
 }) {
   const bgColor =
     variant === 'success'
-      ? 'bg-green-100 dark:bg-green-900/20 border-green-500'
-      : 'bg-red-100 dark:bg-red-900/20 border-red-500'
+      ? 'bg-green-500/5 border-green-500/30'
+      : 'bg-red-500/5 border-red-500/30'
   const textColor =
     variant === 'success'
-      ? 'text-green-800 dark:text-green-200'
-      : 'text-red-800 dark:text-red-200'
+      ? 'text-green-700 dark:text-green-300'
+      : 'text-red-700 dark:text-red-300'
 
   return (
     <div
-      className={`flex items-center p-4 rounded-lg border-2 ${bgColor} ${textColor} ${className}`}
+      className={`flex items-center p-3 rounded-lg border ${bgColor} ${textColor} ${className}`}
     >
       <div className="flex items-center flex-1">
         {icons[variant]}
-        <label className="flex-grow break-all text-center ml-2">{msg}</label>
+        <label className="flex-grow break-all text-center ml-2 text-sm">
+          {msg}
+        </label>
       </div>
     </div>
   )
