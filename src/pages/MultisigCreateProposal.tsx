@@ -111,13 +111,13 @@ const MultisigCreateProposal = () => {
       .then((response) => {
         setLoading(false)
         setTransactionHash(response.transactionHash)
-        
+
         // In newer versions of @cosmjs, use response.events directly
         const wasmEvent = response.events?.find((e) => e.type === 'wasm')
         const proposalIdAttr = wasmEvent?.attributes.find(
           (attr) => attr.key === 'proposal_id'
         )
-        
+
         if (proposalIdAttr) {
           setProposalID(proposalIdAttr.value)
         }
