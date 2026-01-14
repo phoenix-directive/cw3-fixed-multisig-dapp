@@ -22,7 +22,7 @@ The proposal list UI provides icons indicating proposal status:
 
 ## Development
 
-This project was bootstrapped with [`next-cosmwasm-keplr-starter`](https://github.com/ebaker/next-cosmwasm-keplr-starter)
+This project has been migrated to **Vite** for modern, fast development with static build output that requires no server.
 
 ```bash
 git clone https://github.com/ebaker/cw3-fixed-multisig-dapp
@@ -31,21 +31,50 @@ git clone https://github.com/ebaker/cw3-fixed-multisig-dapp
 First, setup your `.env` file by copying the example:
 
 ```bash
-cd my-cosmwasm-dapp
+cd cw3-fixed-multisig-dapp
 cp .env.example .env.local
+```
+
+Install dependencies:
+
+```bash
+npm install
 ```
 
 Then, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:5173](http://localhost:5173) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Build for Production
+
+Build the app for production to create a static site that can be hosted anywhere:
+
+```bash
+npm run build
+```
+
+The built files will be in the `dist/` directory. You can preview the production build locally:
+
+```bash
+npm run preview
+```
+
+## Deployment
+
+Since this is now a static site (no server needed), you can deploy the `dist/` folder to any static hosting service:
+
+- **GitHub Pages** - Free static hosting
+- **Vercel** - Free tier available
+- **Netlify** - Free tier available
+- **Cloudflare Pages** - Free tier available
+- **AWS S3 + CloudFront**
+- **Any web server** - Just upload the dist folder
+
+Simply upload the contents of the `dist/` directory after running `npm run build`.
 
 ## Requirements
 
@@ -53,20 +82,13 @@ Please ensure you have the [Keplr wallet extension](https://chrome.google.com/we
 
 ## Learn More
 
-To learn more about Next.js, CosmJS, Keplr, and Tailwind CSS - take a look at the following resources:
+To learn more about the technologies used:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [CosmJS Repository](https://github.com/cosmos/cosmjs) -JavaScript library for Cosmos ecosystem.
+- [Vite Documentation](https://vitejs.dev/guide/) - learn about Vite features and configuration.
+- [React Documentation](https://react.dev/) - learn about React.
+- [React Router Documentation](https://reactrouter.com/) - routing for React apps.
+- [CosmJS Repository](https://github.com/cosmos/cosmjs) - JavaScript library for Cosmos ecosystem.
 - [@cosmjs/cosmwasm-stargate Documentation](https://cosmos.github.io/cosmjs/latest/cosmwasm-stargate/modules.html) - CosmJS CosmWasm Stargate module documentation.
 - [Keplr Wallet Documentation](https://docs.keplr.app/api/cosmjs.html) - using Keplr wallet with CosmJS.
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs) - utility-first CSS framework.
 - [DaisyUI Documentation](https://daisyui.com/docs/use) - lightweight component library built on [tailwindcss](https://tailwindcss.com/).
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

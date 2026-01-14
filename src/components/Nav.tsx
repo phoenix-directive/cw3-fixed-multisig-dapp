@@ -1,0 +1,59 @@
+import { useSigningClient } from 'contexts/cosmwasm'
+import { Link } from 'react-router-dom'
+import ThemeToggle from 'components/ThemeToggle'
+import NavContractLabel from 'components/NavContractLabel'
+
+function Nav() {
+  const { walletAddress, connectWallet, disconnect } = useSigningClient()
+  const handleConnect = () => {
+    if (walletAddress.length === 0) {
+      connectWallet()
+    } else {
+      disconnect()
+    }
+  }
+
+  const PUBLIC_SITE_ICON_URL = import.meta.env.VITE_SITE_ICON_URL || ''
+  const PUBLIC_SITE_TITLE = import.meta.env.VITE_SITE_TITLE || 'CW3 Multisig'
+
+  return (
+    <div className="border-b w-screen px-2 md:px-16">
+      <nav className="flex flex-wrap text-center md:text-left md:flex flex-row w-full justify-between items-center py-4 ">
+        <div className="flex items-center">
+          <Link to="/">
+            {PUBLIC_SITE_ICON_URL.length > 0 ? (
+              <img
+                src={PUBLIC_SITE_ICON_URL}
+                height={32}
+                width={32}
+                alt={`${PUBLIC_SITE_TITLE} Logo`}
+              />
+            ) : (
+              <span className="text-2xl">⚛️ </span>
+            )}
+          </Link>
+          <Link
+            to="/"
+            className="ml-1 md:ml-2 link link-hover font-semibold text-xl md:text-2xl align-top"
+          >
+            {PUBLIC_SITE_TITLE}
+          </Link>
+        </div>
+        <NavContractLabel />
+        <ThemeToggle />
+        <div className="flex flex-grow md:flex-grow-0 max-w-full">
+          <button
+            className={`block btn btn-outline btn-primary w-full max-w-full truncate ${
+              walletAddress.length > 0 ? 'lowercase' : ''
+            }`}
+            onClick={handleConnect}
+          >
+            {walletAddress || 'Connect Wallet'}
+          </button>
+        </div>
+      </nav>
+    </div>
+  )
+}
+
+export default Nav

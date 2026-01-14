@@ -1,23 +1,20 @@
-module.exports = {
-  mode: 'jit',
-  purge: {
-    content: [
-      './pages/**/*.{js,ts,jsx,tsx}',
-      './components/**/*.{js,ts,jsx,tsx}',
-    ],
-    options: {
-      safelist: [/data-theme$/],
-    },
-  },
-  darkMode: false, // or 'media' or 'class'
+import daisyui from 'daisyui'
+import themes from './src/styles/daisyui-themes.json' assert { type: 'json' }
+
+export default {
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+  ],
+  darkMode: 'class',
   theme: {
     extend: {},
   },
-  variants: {
-    extend: {},
-  },
-  plugins: [require('daisyui')],
+  plugins: [daisyui],
   daisyui: {
-    themes: [require('./styles/daisyui-themes.json')],
+    themes: [themes],
+    base: true,
+    styled: true,
+    utils: true,
   },
 }
