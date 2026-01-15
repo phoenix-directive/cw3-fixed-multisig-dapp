@@ -13,6 +13,7 @@
   "dependencies": {
     "@cosmjs/cosmwasm-stargate": "^0.38.1",
     "@cosmjs/stargate": "^0.38.1",
+    "@cosmjs/tendermint-rpc": "^0.38.1",
     "lodash.clonedeep": "^4.5.0",
     "lucide-react": "^0.562.0",
     "react": "^18.3.1",

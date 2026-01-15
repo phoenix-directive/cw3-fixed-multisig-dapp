@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { connectKeplr } from 'services/keplr'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { GasPrice } from '@cosmjs/stargate'
+import { HttpBatchClient, Tendermint37Client } from '@cosmjs/tendermint-rpc'
 
 export interface ISigningCosmWasmClientContext {
   walletAddress: string
@@ -52,11 +53,15 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
         PUBLIC_CHAIN_ID
       )
 
-      // make client
-      const client = await SigningCosmWasmClient.connectWithSigner(
-        PUBLIC_RPC_ENDPOINT,
-        offlineSigner,
+      // make client with batch RPC
+      const httpBatchClient = new HttpBatchClient(PUBLIC_RPC_ENDPOINT, {
+        batchSizeLimit: 10,
+      })
+      const tendermintClient = await Tendermint37Client.create(httpBatchClient)
 
+      const client = await SigningCosmWasmClient.createWithSigner(
+        tendermintClient,
+        offlineSigner,
         {
           gasPrice: GasPrice.fromString('0.015uluna'),
         }

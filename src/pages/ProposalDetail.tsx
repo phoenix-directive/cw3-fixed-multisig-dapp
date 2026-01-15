@@ -4,8 +4,13 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import LineAlert from 'components/LineAlert'
 import { VoteInfo, ProposalResponse } from 'types/cw3'
-import { getExplorerUrl } from 'util/conversion'
-import { ChevronLeft } from 'lucide-react'
+import {
+  getExplorerUrl,
+  getAddressExplorerUrl,
+  shortenAddress,
+} from 'util/conversion'
+import { ChevronLeft, ExternalLink } from 'lucide-react'
+import { getMemberName } from 'util/recentMultisigs'
 
 const CHAIN_ID = import.meta.env.VITE_CHAIN_ID || 'phoenix-1'
 
@@ -82,6 +87,9 @@ const ProposalDetail = () => {
   const [error, setError] = useState('')
   const [proposal, setProposal] = useState<ProposalResponse | null>(null)
   const [votes, setVotes] = useState([])
+  const [voters, setVoters] = useState<Array<{ addr: string; weight: number }>>(
+    []
+  )
   const [timestamp, setTimestamp] = useState(new Date())
   const [transactionHash, setTransactionHash] = useState('')
 
@@ -102,11 +110,15 @@ const ProposalDetail = () => {
       signingClient.queryContractSmart(multisigAddress, {
         list_votes: { proposal_id: parseInt(proposalId) },
       }),
+      signingClient.queryContractSmart(multisigAddress, {
+        list_voters: {},
+      }),
     ])
       .then((values) => {
-        const [proposal, { votes }] = values
+        const [proposal, { votes }, { voters }] = values
         setProposal(proposal)
         setVotes(votes)
+        setVoters(voters)
         setLoading(false)
       })
       .catch((err) => {
@@ -223,6 +235,102 @@ const ProposalDetail = () => {
                   </pre>
                 </div>
               </div>
+
+              {/* Votes section */}
+              {(votes.length > 0 || voters.length > 0) && (
+                <div className="mb-6 p-4 bg-card border border-border rounded-lg">
+                  <h3 className="text-lg font-semibold text-foreground mb-3">
+                    Votes
+                  </h3>
+                  <div className="space-y-2">
+                    {votes.map((vote: VoteInfo) => {
+                      const memberName = getMemberName(vote.voter)
+                      const voteColor =
+                        vote.vote === 'yes'
+                          ? 'text-green-600 dark:text-green-400'
+                          : vote.vote === 'no'
+                            ? 'text-red-600 dark:text-red-400'
+                            : 'text-muted-foreground'
+
+                      return (
+                        <div
+                          key={vote.voter}
+                          className="flex items-center justify-between gap-2 text-sm"
+                        >
+                          <div className="flex-1 flex items-center gap-2">
+                            <a
+                              href={getAddressExplorerUrl(CHAIN_ID, vote.voter)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-mono text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
+                            >
+                              {shortenAddress(vote.voter)}
+                              <ExternalLink className="h-3 w-3" />
+                            </a>
+                            {memberName && (
+                              <span className="font-medium text-foreground">
+                                {memberName}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <span
+                              className={`font-semibold uppercase ${voteColor}`}
+                            >
+                              {vote.vote}
+                            </span>
+                            <span className="text-muted-foreground">
+                              Weight: {vote.weight}
+                            </span>
+                          </div>
+                        </div>
+                      )
+                    })}
+                    {voters
+                      .filter(
+                        (voter) =>
+                          !votes.find((v: VoteInfo) => v.voter === voter.addr)
+                      )
+                      .map((voter) => {
+                        const memberName = getMemberName(voter.addr)
+                        return (
+                          <div
+                            key={voter.addr}
+                            className="flex items-center justify-between gap-2 text-sm opacity-50"
+                          >
+                            <div className="flex-1 flex items-center gap-2">
+                              <a
+                                href={getAddressExplorerUrl(
+                                  CHAIN_ID,
+                                  voter.addr
+                                )}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-mono text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
+                              >
+                                {shortenAddress(voter.addr)}
+                                <ExternalLink className="h-3 w-3" />
+                              </a>
+                              {memberName && (
+                                <span className="font-medium text-foreground">
+                                  {memberName}
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <span className="text-muted-foreground italic">
+                                Not voted
+                              </span>
+                              <span className="text-muted-foreground">
+                                Weight: {voter.weight}
+                              </span>
+                            </div>
+                          </div>
+                        )
+                      })}
+                  </div>
+                </div>
+              )}
 
               <VoteButtons
                 onVoteYes={handleVote.bind(null, 'yes')}
