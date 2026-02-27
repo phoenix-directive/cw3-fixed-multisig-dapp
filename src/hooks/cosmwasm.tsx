@@ -11,6 +11,7 @@ export interface ISigningCosmWasmClientContext {
   error: Error | null
   connectWallet: any
   disconnect: Function
+  isLedger: boolean
 }
 
 const PUBLIC_RPC_ENDPOINT = import.meta.env.VITE_CHAIN_RPC_ENDPOINT
@@ -22,6 +23,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     useState<SigningCosmWasmClient | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
+  const [isLedger, setIsLedger] = useState(false)
 
   // Auto-reconnect on mount if wallet was previously connected
   useEffect(() => {
@@ -48,10 +50,16 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       // enable website to access kepler
       await (window as any).keplr.enable(PUBLIC_CHAIN_ID)
 
+      // Check if user is using a Ledger device
+      const key = await (window as any).keplr.getKey(PUBLIC_CHAIN_ID)
+      const isUsingLedger = key.isNanoLedger || false
+      setIsLedger(isUsingLedger)
+
       // get offline signer for signing txs
-      const offlineSigner = await (window as any).keplr.getOfflineSigner(
-        PUBLIC_CHAIN_ID
-      )
+      // Use Amino signer for Ledger devices (required for Ledger compatibility)
+      const offlineSigner = isUsingLedger
+        ? await (window as any).keplr.getOfflineSignerOnlyAmino(PUBLIC_CHAIN_ID)
+        : await (window as any).keplr.getOfflineSigner(PUBLIC_CHAIN_ID)
 
       // make client with batch RPC
       const httpBatchClient = new HttpBatchClient(PUBLIC_RPC_ENDPOINT, {
@@ -92,6 +100,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     setWalletAddress('')
     setSigningClient(null)
     setLoading(false)
+    setIsLedger(false)
     // Clear wallet connection from localStorage
     localStorage.removeItem('walletConnected')
   }
@@ -103,5 +112,6 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     error,
     connectWallet,
     disconnect,
+    isLedger,
   }
 }
